@@ -12,35 +12,27 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView.OnItemClickListener; 
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class MainActivity extends Activity {
-	private List<String> datas;
-
+public class MainActivity extends Activity { 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		ListView listview = (ListView) findViewById(R.id.listview);
-
-//		ArrayAdapter adapter = new ArrayAdapter(this, R.layout.item, R.id.text,
-//				getData());
-		
-		
-		listview.setAdapter(new MyAdapter());
+		final ListView listview = (ListView) findViewById(R.id.listview);  
+		listview.setAdapter(new MyAdapter((LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE)));
 		listview.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				String text = ((TextView)arg1.findViewById(R.id.text)).getText().toString();  
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				String text = ((TextView)view.findViewById(R.id.text)).getText().toString();  
 				TextView textview = new TextView(MainActivity.this);
 				textview.setText(text);
-				new AlertDialog.Builder(MainActivity.this).setTitle(arg3+"/"+1500).setIcon(
+				new AlertDialog.Builder(MainActivity.this).setTitle(position+"/"+listview.getAdapter().getCount()).setIcon(
 					     android.R.drawable.ic_dialog_info).setView(textview).setPositiveButton("确定", null)
 					     .setNegativeButton("取消", null).show(); 
 			}
@@ -61,10 +53,10 @@ public class MainActivity extends Activity {
 		ImageView imageView;
 	}
 	
-	class MyAdapter extends BaseAdapter{
-		private List<String> datas = new ArrayList<String>();
+	private static final class MyAdapter extends BaseAdapter{
+		private List<String> datas;
 		private LayoutInflater inflater;
-		MyAdapter() {
+		MyAdapter(LayoutInflater inflater1) {
 			datas = new ArrayList<String>();
 			for (int i = 0; i < 1500; i++) {
 				datas.add("Tablets are a fast-growing part of the Android installed base "
@@ -73,7 +65,7 @@ public class MainActivity extends Activity {
 						+ "nd techniques on how to deliver a great app experience for tablet users.");
 			}
 			
-			inflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);  
+			inflater = inflater1;  
 		}
 		@Override
 		public int getCount() {
@@ -92,10 +84,8 @@ public class MainActivity extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) { 
-			ViewHolder holder = null;
-			
-			if(convertView == null){
-				
+			ViewHolder holder = null; 
+			if(convertView == null){ 
 				convertView =  inflater.inflate(R.layout.item, null);
 				holder = new ViewHolder();
 				holder.textView = (TextView)convertView.findViewById(R.id.text);

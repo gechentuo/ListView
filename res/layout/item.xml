@@ -10,6 +10,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
+        android:contentDescription="@string/hello_world"
         android:src="@drawable/ic_launcher"
 	 />
     <TextView 
